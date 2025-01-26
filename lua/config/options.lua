@@ -6,3 +6,14 @@ vim.g.layzvim_rust_diagnostics = "bacon-ls"
 
 vim.opt.relativenumber = false
 vim.opt.scrolloff = 20
+vim.g.clipboard = {
+  name = "OSC 52",
+  copy = {
+    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+  },
+  paste = {
+    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+  },
+}
