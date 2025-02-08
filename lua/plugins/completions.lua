@@ -15,6 +15,7 @@ return {
 		-- build = 'nix run .#build-plugin',
 
 		---@module 'blink.cmp'
+---@diagnostic disable-next-line: missing-fields
 		opts = {
 			-- 'default' for mappings similar to built-in completion
 			-- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
@@ -49,11 +50,12 @@ return {
 						},
 					},
 					border = "rounded",
-					winblend = 10,
+					winblend = 5,
 				},
 				documentation = {
 					window = {
-						border = "single",
+						border = "rounded",
+            winblend = 5,
 					},
 					auto_show = true,
 					auto_show_delay_ms = 500,
@@ -131,7 +133,7 @@ return {
 					},
 				},
 			},
-			signature = { enabled = true, window = { border = "single" } },
+			signature = { enabled = true, window = { border = "rounded", winblend = 5 } },
 			snippets = { preset = "default" },
 		},
 		opts_extend = { "sources.default" },

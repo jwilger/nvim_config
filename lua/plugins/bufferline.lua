@@ -23,8 +23,7 @@ return {
 				diagnostics = "nvim_lsp",
 				always_show_bufferline = false,
 				diagnostics_indicator = function(_, _, diag)
-					local ret = (diag.error .. " " or "")
-						.. (diag.warning or "")
+					local ret = (diag.error and diag.error .. " " or "") .. (diag.warning or "")
 					return vim.trim(ret)
 				end,
 				offsets = {

@@ -6,7 +6,7 @@ return {
 		event = { "BufReadPost", "BufWritePost", "BufNewFile", "VeryLazy" },
 		lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
 		init = function(plugin)
-			-- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
+			-- Add nvim-treesitter queries to the rtp and it's custom query predicates early
 			-- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
 			-- no longer trigger the **nvim-treesitter** module to be loaded in time.
 			-- Luckily, the only things that those plugins need are the custom queries, which we make available
@@ -142,6 +142,7 @@ return {
 				}
 
 				-- Merge the current configuration with the new textobjects configuration
+				---@diagnostic disable-next-line: missing-fields
 				ts_configs.setup({
 					textobjects = vim.tbl_deep_extend("force", current_config, textobjects_config),
 				})
