@@ -1,45 +1,84 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+vim.g.autoformat = true
 
-vim.g.layzvim_rust_diagnostics = "bacon-ls"
+-- Snacks animations
+-- Set to `false` to globally disable all snacks animations
+vim.g.snacks_animate = true
 
-vim.opt.relativenumber = false
-vim.opt.scrolloff = 20
+local opt = vim.opt
 
-local diagnostic_float_win = nil
-local function toggle_diagnostic_float()
-  if diagnostic_float_win and vim.api.nvim_win_is_valid(diagnostic_float_win) then
-    -- If the window is open, close it
-    vim.api.nvim_win_close(diagnostic_float_win, true)
-    diagnostic_float_win = nil
-  else
-    -- If the window is not open, show it
-    diagnostic_float_win = vim.diagnostic.open_float(nil, { focus = false })
-  end
+opt.autowrite = true -- Enable auto write
+opt.backup = false
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+opt.completeopt = "menu,menuone,noselect"
+opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
+opt.confirm = true -- Confirm to save changes before exiting modified buffer
+opt.cursorline = true -- Enable highlighting of the current line
+opt.expandtab = true -- Use spaces instead of tabs
+opt.fillchars = { foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱", eob = " ", }
+opt.foldlevel = 99
+opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
+opt.formatoptions = "jcroqlnt" -- tcqj
+opt.grepformat = "%f:%l:%c:%m"
+opt.grepprg = "rg --vimgrep"
+opt.ignorecase = true -- Ignore case
+opt.inccommand = "nosplit" -- preview incremental substitute
+opt.jumpoptions = "view"
+opt.laststatus = 3 -- global statusline
+opt.linebreak = true -- Wrap lines at convenient points
+opt.list = true -- Show some invisible characters (tabs...
+opt.mouse = "a" -- Enable mouse mode
+opt.number = true -- Print line number
+opt.pumblend = 10 -- Popup blend
+opt.pumheight = 10 -- Maximum number of entries in a popup
+opt.relativenumber = false -- Relative line numbers
+opt.ruler = false -- Disable the default ruler
+opt.scrolloff = 20 -- Lines of context
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+opt.shiftround = true -- Round indent
+opt.shiftwidth = 2 -- Size of an indent
+opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.showmode = false -- Dont show mode since we have a statusline
+opt.sidescrolloff = 8 -- Columns of context
+opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
+opt.smartcase = true -- Don't ignore case with capitals
+opt.smartindent = true -- Insert indents automatically
+opt.spelllang = { "en" }
+opt.splitbelow = true -- Put new windows below current
+opt.splitkeep = "screen"
+opt.splitright = true -- Put new windows right of current
+opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
+opt.swapfile = false
+opt.tabstop = 2 -- Number of spaces tabs count for
+opt.termguicolors = true -- True color support
+opt.timeoutlen = 300
+opt.undofile = true
+opt.undolevels = 10000
+opt.updatetime = 200 -- Save swap file and trigger CursorHold
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+opt.wildmode = "longest:full,full" -- Command-line completion mode
+opt.winminwidth = 5 -- Minimum window width
+opt.wrap = false -- Disable line wrap
+opt.writebackup = false
+
+if vim.fn.has("nvim-0.10") == 1 then
+  opt.smoothscroll = true
+  opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+  opt.foldmethod = "expr"
+  opt.foldtext = ""
+else
+  opt.foldmethod = "indent"
+  opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
 end
-vim.diagnostic.config({
-  virtual_text = false, -- Disable inline text diagnostics
-  signs = true, -- Show signs in the gutter
-  underline = true, -- Underline the problem text
-  update_in_insert = false, -- Don't update diagnostics in insert mode
-  float = {
-    show_header = true,
-    source = true, -- Show source of the diagnostics
-    border = "rounded", -- Rounded border for floating window
-    focusable = false, -- Make the floating window non-focusable
-  },
-})
-vim.keymap.set("n", "<Leader>v", toggle_diagnostic_float, { noremap = true, desc = "Toggle diagnostic float" })
 
-vim.g.clipboard = {
-  name = "OSC 52",
-  copy = {
-    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-  },
-  paste = {
-    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-  },
-}
+-- Fix markdown indentation settings
+vim.g.markdown_recommended_style = 0
+
+
+vim.api.nvim_set_hl(0, 'SnackHeader', { fg = '#C6A0F6', bg = 'none', bold = true })
+vim.api.nvim_set_hl(0, 'SnackText', { fg = '#F4DBD6', bg = 'none', bold = true })
+vim.api.nvim_set_hl(0, 'SnackSubText', { fg = '#F0C6C6', bg = 'none' })
+vim.api.nvim_set_hl(0, 'SnackGame', { fg = '#8BD5CA', bg = 'none' })
+vim.api.nvim_set_hl(0, 'SnackGameText', { fg = '#ED8796', bg = 'none', bold = true })
+vim.api.nvim_set_hl(0, 'SnackWinningMove', { fg = '#F5A97F', bg = 'none', italic = true })
