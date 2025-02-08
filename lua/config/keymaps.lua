@@ -122,12 +122,6 @@ map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
--- TODO: How do we do this without LazyVim?
--- -- formatting
--- map({ "n", "v" }, "<leader>cf", function()
---   LazyVim.format({ force = true })
--- end, { desc = "Format" })
-
 -- diagnostic
 local diagnostic_goto = function(next, severity)
 	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
@@ -169,6 +163,8 @@ map({ "n", "x" }, "<leader>gY", function()
 			vim.fn.setreg("+", url)
 		end,
 		notify = false,
+		what = "branch",
+		remote_patterns = { "origin" },
 	})
 end, { desc = "Git Browse (copy)" })
 
@@ -184,3 +180,12 @@ map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
 map({ "n", "t" }, "<C-/>", function()
 	Snacks.terminal.toggle()
 end, { desc = "Toggle terminal window" })
+
+-- LSP
+map("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
+map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
+map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to Implementation" })
+map("n", "gr", vim.lsp.buf.references, { desc = "Go to References" })
+map("n", "K", vim.lsp.buf.hover, { desc = "Hover Documentation" })
+map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename Symbol" })
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
